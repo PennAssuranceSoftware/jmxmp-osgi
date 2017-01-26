@@ -1,0 +1,7 @@
+Private-Package: com.pennassurancesoftware.jmxmp.internal
+-buildpath: \
+	osgi.core;version=5.0,\
+	org.ops4j.pax.logging.pax-logging-api;version=1.7,\
+	org.glassfish.main.external.jmxremote_optional-repackaged;version=4.1
+Bundle-Activator: com.pennassurancesoftware.jmxmp.internal.Activator
+Bundle-Name: OSGi JMXMP Service

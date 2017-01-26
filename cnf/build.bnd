@@ -1,0 +1,75 @@
+# Configure Repositories
+-plugin.1.Central: \
+	aQute.bnd.deployer.repository.wrapper.Plugin; \
+		location = "${build}/cache/wrapper"; \
+		reindex = true, \
+	aQute.bnd.jpm.Repository; \
+		includeStaged = true; \
+		name = Central; \
+		location = ~/.bnd/shacache; \
+		index = ${build}/central.json
+
+-plugin.2.Local: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = Local; \
+		pretty = true; \
+		local = ${build}/local
+
+-plugin.3.Templates: \
+	aQute.bnd.deployer.repository.LocalIndexedRepo; \
+		name = Templates; \
+		pretty = true; \
+		local = ${build}/templates
+
+-plugin.4.Release: \
+	aQute.bnd.repository.maven.provider.MavenBndRepository; \
+		name = Release; \
+		releaseUrl=http://repo.pennassurancesoftware.com/artifactory/libs-release-local/; \
+		snapshotUrl=http://repo.pennassurancesoftware.com/artifactory/libs-snapshot-local/; \
+        index=${.}/../maven.properties;
+
+-plugin.5.Amdatu: \
+	aQute.bnd.deployer.repository.FixedIndexedRepo; \
+	    name=Amdatu Releases; \
+	    locations=http://repository.amdatu.org/release/index.xml.gz
+
+-plugin.6.AmdatuDeps: \
+	aQute.bnd.deployer.repository.FixedIndexedRepo; \
+	    name=Amdatu Dependencies; \
+	    locations=http://repository.amdatu.org/dependencies/index.xml.gz
+
+-plugin.7.Central2: \
+    aQute.bnd.deployer.repository.wrapper.Plugin; \
+        location="${build}/cache/wrapper2"; \
+        reindex=true, \
+	aQute.bnd.repository.maven.provider.MavenBndRepository; \
+		releaseUrl=https://repo.maven.apache.org/maven2/; \
+        name = Central2
+
+-plugin.8.Pas: \
+    aQute.bnd.deployer.repository.wrapper.Plugin; \
+        location="${build}/cache/wrapper2"; \
+        reindex=true, \
+	aQute.bnd.repository.maven.provider.MavenBndRepository; \
+		releaseUrl=http://repo.pennassurancesoftware.com/artifactory/public/; \
+        name = Pas
+
+
+# JUnit
+junit: org.apache.servicemix.bundles.junit; version=4.12
+
+baseline.version:       0.0.0
+base.version:           0.0.1
+
+-releaserepo: Release
+-baselinerepo: Release
+-baseline: *
+
+Bundle-Version: ${base.version}.${tstamp}
+
+# Maven
+groupId: com.pennassurancesoftware
+-connection-settings: ${build}/settings.xml
+-pom: \
+	groupid	=	${groupId},\
+	version =	${versionmask;===;${@version}}

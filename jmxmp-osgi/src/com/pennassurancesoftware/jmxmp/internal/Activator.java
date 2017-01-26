@@ -20,6 +20,29 @@ import org.slf4j.LoggerFactory;
 import com.sun.jmx.remote.protocol.jmxmp.ServerProvider;
 
 public class Activator implements BundleActivator {
+   private State state = new State();
+
+   public static class State {
+      private final Optional<Agent.Running> agent;
+
+      public State() {
+         this( Optional.empty() );
+      }
+
+      public State with( Agent.Running agent ) {
+         return new State( Optional.ofNullable( agent ) );
+      }
+
+      public State( Optional<Agent.Running> agent ) {
+         this.agent = agent;
+      }
+
+      public State stop() {
+         agent.ifPresent( a -> a.stop() );
+
+         return this;
+      }
+   }
 
    /**
     * This exposes JMX access over JMXMP, suitable for high-security
@@ -52,7 +75,7 @@ public class Activator implements BundleActivator {
     */
    public static class Agent {
       private final static Logger LOG = LoggerFactory.getLogger( Agent.class );
-      
+
       public static Agent dflt() {
          return new Agent();
       }
@@ -181,6 +204,7 @@ public class Activator implements BundleActivator {
 
       private JMXConnectorServer connector() {
          try {
+            ServerProvider.class.getName(); // OSGi HACK
             return JMXConnectorServerFactory.newJMXConnectorServer( url(), env(), server() );
          }
          catch( Throwable exception ) {
@@ -195,13 +219,13 @@ public class Activator implements BundleActivator {
 
    @Override
    public void start( BundleContext context ) throws Exception {
-      ServerProvider.class.getName();
-      Agent.dflt().start();
+      state = state.with( Agent.dflt().start() );
+      System.out.print( "blah" );
    }
 
    @Override
    public void stop( BundleContext context ) throws Exception {
-
+      state = state.stop();
    }
 
 }

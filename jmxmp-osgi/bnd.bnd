@@ -5,3 +5,4 @@ Private-Package: com.pennassurancesoftware.jmxmp.internal
 	org.glassfish.main.external.jmxremote_optional-repackaged;version=4.1
 Bundle-Activator: com.pennassurancesoftware.jmxmp.internal.Activator
 Bundle-Name: OSGi JMXMP Service
+Include-Resource: resources
